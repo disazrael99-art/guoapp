@@ -98,7 +98,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          expected='3fdc07a2297421373607c098f9b847c1377d9266ee07003b9d7fda8c4b581d8a'
+          expected='055da3eab2c0cb7dc2282746345c00986a781b3297d0c99c2b9af4453899b962'
           apksigner=$(find "${ANDROID_HOME}/build-tools" -name apksigner -type f 2>/dev/null | sort | tail -n1 || true)
           if [ -z "$apksigner" ]; then
             sdkmanager 'build-tools;35.0.0' >/dev/null
@@ -108,7 +108,7 @@ jobs:
           "$apksigner" --version || true
           for apk in dist/android/*.apk; do
             echo "== $(basename "$apk")"
-            output=$("$apksigner" verify --print-certs "$apk" 2>&1 || true)
+            output=$("$apksigner" verify --print-certs "$apk" 2>&1)
             printf '%s\n' "$output"
             if ! printf '%s' "$output" | tr -d ':' | tr '[:upper:]' '[:lower:]' | grep -q "$expected"; then
               echo "签名证书与发布证书不一致，已终止。" >&2
@@ -259,7 +259,7 @@ jobs:
             printf '\n%s\n' "Windows（解压后运行 hongguojian.exe 或 zhenguojian.exe）："
             printf '%s\n' "- *-windows-x64.zip：Windows 10/11 x64 完整包；构建机没有音频和图形设备，播放自检未通过，未做设备验收"
             printf '\n%s\n' "校验：SHA256SUMS.txt"
-            printf '%s\n' "签名证书 SHA-256：3F:DC:07:A2:29:74:21:37:36:07:C0:98:F9:B8:47:C1:37:7D:92:66:EE:07:00:3B:9D:7F:DA:8C:4B:58:1D:8A"
+            printf '%s\n' "签名证书 SHA-256：05:5D:A3:EA:B2:C0:CB:7D:C2:28:27:46:34:5C:00:98:6A:78:1B:32:97:D0:C9:9C:2B:9A:F4:45:38:99:B9:62"
           } > notes.md
           if gh release view "$tag" >/dev/null 2>&1; then
             gh release upload "$tag" release/* --clobber
