@@ -595,7 +595,7 @@ Android 正式发布持续使用同一签名并递增构建号，在仓库 Secre
 | `ANDROID_KEY_ALIAS` | 密钥别名 |
 | `ANDROID_KEY_PASSWORD` | 密钥密码 |
 
-未配置时生成预览 APK，不同构建机的预览签名可能无法相互覆盖。当前发布签名文件为 `guoapp-release.jks`，别名 `guoapp`，证书 SHA-256 为 `3F:DC:07:A2:29:74:21:37:36:07:C0:98:F9:B8:47:C1:37:7D:92:66:EE:07:00:3B:9D:7F:DA:8C:4B:58:1D:8A`；更换签名文件会导致老版本无法覆盖升级。Android 构建后会自动校验 APK 的签名证书指纹，与上面不一致时直接失败。创建签名文件并保存到项目外：
+本 Fork 要求配置全部四个签名 Secrets，未配置时在构建前报错，不生成临时调试签名包。PKCS12 和 JKS 均支持。当前发布签名文件为 `guoapp-release.p12`，别名 `guoapp`，证书 SHA-256 为 `05:5D:A3:EA:B2:C0:CB:7D:C2:28:27:46:34:5C:00:98:6A:78:1B:32:97:D0:C9:9C:2B:9A:F4:45:38:99:B9:62`；更换签名文件会导致老版本无法覆盖升级。本 Fork 使用 disazrael99-art 的独立固定签名，不能覆盖原作者签名的安装包；此 Fork 的后续版本沿用同一签名。Android 构建后会自动校验 APK 的签名证书指纹，与上面不一致时直接失败。创建签名文件并保存到项目外：
 
 ~~~sh
 keytool -genkeypair -v -keystore guoapp-release.jks -storetype JKS -alias guoapp -keyalg RSA -keysize 2048 -validity 10000
