@@ -22,8 +22,7 @@ names = ['ANDROID_KEYSTORE_BASE64', 'ANDROID_KEYSTORE_PASSWORD',
          'ANDROID_KEY_ALIAS', 'ANDROID_KEY_PASSWORD']
 values = [os.environ.get(name, '') for name in names]
 if not any(values):
-    print('未配置签名 Secrets：生成预览 APK；正式发布请配置固定签名。')
-    raise SystemExit(0)
+    raise SystemExit('未配置签名 Secrets：请先设置全部四个 Android 签名 Secrets，再运行构建。')
 if not all(values):
     raise SystemExit('Android 签名需要同时配置全部四个 Secrets。')
 try:
@@ -55,7 +54,9 @@ def escape(value):
     return result
 
 
-properties = {'storeFile': key_file.as_posix(), 'storePassword': values[1],
+properties = {'storeFile': key_file.as_posix(),
+              'storeType': 'JKS' if data[:4] == b'\xfe\xed\xfe\xed' else 'PKCS12',
+              'storePassword': values[1],
               'keyAlias': values[2], 'keyPassword': values[3]}
 properties_file.write_text(''.join(name + '=' + escape(value) + '\n'
                                 for name, value in properties.items()), encoding='ascii')

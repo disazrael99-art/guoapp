@@ -44,6 +44,7 @@ android {
         if (releaseKey.exists()) {
             create("release") {
                 storeFile = file(requireNotNull(releaseProperties.getProperty("storeFile")))
+                storeType = releaseProperties.getProperty("storeType", "JKS")
                 storePassword = requireNotNull(releaseProperties.getProperty("storePassword"))
                 keyAlias = requireNotNull(releaseProperties.getProperty("keyAlias"))
                 keyPassword = requireNotNull(releaseProperties.getProperty("keyPassword"))
